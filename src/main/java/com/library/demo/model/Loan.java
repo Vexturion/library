@@ -1,20 +1,37 @@
 package com.library.demo.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@AllArgsConstructor
+@Entity
 public class Loan {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Clave primaria para Loan
+
+    @ManyToOne
+    @JoinColumn(name = "book_isbn") // Nombre de la columna que referencia la tabla Book
     private Book book;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id") // Nombre de la columna que referencia la tabla User
     private User user;
     private LocalDate loanDate;
     private LocalDate dueDate;
     private boolean returned;
-    // TODO: Implementar constructor, getters y setters
+
+    public Loan(Book loanedBook1, User user, LocalDate loanDate, LocalDate dueDate, boolean b) {
+    }
+
+    public Loan() {
+
+    }
+
+
     public Book getBook() {
         return book;
     }
@@ -57,6 +74,10 @@ public class Loan {
 
     public boolean isOverdue() {
         return !returned && LocalDate.now().isAfter(dueDate);
+    }
+
+    public Long getId() {
+        return id;
     }
 
 }

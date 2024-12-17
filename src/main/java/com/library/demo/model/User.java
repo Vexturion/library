@@ -1,19 +1,20 @@
 package com.library.demo.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "USERS")
 public class User {
 
+    @Id
     private String id;
     private String name;
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Loan> activeLoans;
-    // TODO: Implementar constructor, getters y setters
 
     public User() {}
 

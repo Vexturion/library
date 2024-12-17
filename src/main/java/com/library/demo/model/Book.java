@@ -1,17 +1,19 @@
 package com.library.demo.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@AllArgsConstructor
+@Entity
 public class Book {
 
+    @Id
     private String isbn;
     private String title;
     private String author;
     private boolean available;
-    // TODO: Implementar constructor, getters y setters
 
     public String getIsbn() {
         return isbn;

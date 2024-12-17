@@ -1,11 +1,15 @@
 package com.library.demo.controller;
 
+import com.library.demo.dto.LoanRequest;
+import com.library.demo.dto.LoanResponse;
 import com.library.demo.exception.LibraryException;
 import com.library.demo.model.Book;
 import com.library.demo.model.Loan;
 import com.library.demo.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +24,23 @@ public class LibraryController {
     // Endpoint para prestar un libro
     // Parámetros recibidos vía query params: /library/loan?isbn=1234&userId=usr123
     @PostMapping("/loan")
-    public ResponseEntity<Loan> loanBook(@RequestParam String isbn, @RequestParam String userId) {
+    public ResponseEntity<?> loanBook(@Validated @RequestBody LoanRequest loanRequest) {
         try {
-            Loan newLoan = libraryService.loanBook(isbn, userId);
-            return ResponseEntity.ok(newLoan);
+            Loan newLoan = libraryService.loanBook(loanRequest.getIsbn(), loanRequest.getUserId());
+            // Mapeo manual a LoanResponse
+            LoanResponse response = new LoanResponse(
+                    newLoan.getId(),
+                    newLoan.getBook().getIsbn(),
+                    newLoan.getUser().getId(),
+                    newLoan.getLoanDate(),
+                    newLoan.getDueDate(),
+                    newLoan.isReturned()
+            );
+            return ResponseEntity.ok(response);
         } catch (LibraryException e) {
-            // Si ocurre algún error (por ejemplo, el libro no existe, no está disponible o el usuario no puede tomar más préstamos)
-            // retornamos un Bad Request con el detalle del error.
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         }
     }
 
@@ -40,12 +53,12 @@ public class LibraryController {
     }
 
 
-    // Endpoint para buscar libros por título (ignorando mayúsculas/minúsculas)
+    // Endpoint para buscar libros por autor (ignorando mayúsculas/minúsculas)
     // Ejemplo: /library/books?title=java
     @GetMapping("/authors")
     public ResponseEntity<List<Book>> findBooksByAuthor(@RequestParam String author) {
-        List<Book> foundBooks = libraryService.findBooksByAuthor(author);
-        return ResponseEntity.ok(foundBooks);
+        List<Book> foundAuthors = libraryService.findBooksByAuthor(author);
+        return ResponseEntity.ok(foundAuthors);
     }
 
 
