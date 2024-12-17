@@ -2,10 +2,7 @@ package com.library.demo.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Entity
 public class Book {
 
@@ -14,6 +11,10 @@ public class Book {
     private String title;
     private String author;
     private boolean available;
+
+    public Book() {
+
+    }
 
     public String getIsbn() {
         return isbn;
@@ -47,4 +48,10 @@ public class Book {
         this.available = available;
     }
 
+    public Book(String isbn, String title, String author, boolean available) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.available = available;
+    }
 }

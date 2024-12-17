@@ -22,7 +22,7 @@ public class LibraryController {
     private LibraryService libraryService;
 
     // Endpoint para prestar un libro
-    // Parámetros recibidos vía query params: /library/loan?isbn=1234&userId=usr123
+    // Parámetros enviados vía body request: isbn=1234&userId=usr123
     @PostMapping("/loan")
     public ResponseEntity<?> loanBook(@Validated @RequestBody LoanRequest loanRequest) {
         try {
@@ -45,7 +45,7 @@ public class LibraryController {
     }
 
     // Endpoint para buscar libros por título (ignorando mayúsculas/minúsculas)
-    // Ejemplo: /library/books?title=java
+    // Ejemplo: /library/books?title=tituloDelLibro
     @GetMapping("/books")
     public ResponseEntity<List<Book>> findBooksByTitle(@RequestParam String title) {
         List<Book> foundBooks = libraryService.findBooksByTitle(title);
@@ -54,7 +54,7 @@ public class LibraryController {
 
 
     // Endpoint para buscar libros por autor (ignorando mayúsculas/minúsculas)
-    // Ejemplo: /library/books?title=java
+    // Ejemplo: /library/authors?author=nombreDelAuthor
     @GetMapping("/authors")
     public ResponseEntity<List<Book>> findBooksByAuthor(@RequestParam String author) {
         List<Book> foundAuthors = libraryService.findBooksByAuthor(author);

@@ -80,4 +80,5 @@ public class Loan {
         return id;
     }
 
+    public void setId() { this.id = id;}
 }
